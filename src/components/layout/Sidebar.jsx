@@ -4,6 +4,7 @@ const links = [
   { to: '/', label: 'Dashboard', icon: '▦' },
   { to: '/pipeline', label: 'Pipeline', icon: '◈' },
   { to: '/tasks', label: 'Tasks', icon: '✓' },
+  { to: '/activity', label: 'Activity',  icon: '◎' },
 ]
 
 function Sidebar() {
