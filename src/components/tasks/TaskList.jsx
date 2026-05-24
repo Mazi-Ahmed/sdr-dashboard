@@ -1,32 +1,30 @@
 import { useState } from 'react'
 
-const initialTasks = [
-  { id: 1, text: 'Follow up: Initech proposal', tag: 'Overdue' },
-  { id: 2, text: 'Call Marco @ Acme 2pm', tag: 'Today' },
-  { id: 3, text: 'Reply to Umbrella intro email', tag: 'Today' },
-  { id: 4, text: 'Book discovery call with Hooli', tag: 'This week' },
-]
-
 const tagStyles = {
-  Overdue: 'bg-red-50 text-red-700',
-  Today: 'bg-blue-50 text-blue-700',
+  Overdue:     'bg-red-50 text-red-700',
+  Today:       'bg-blue-50 text-blue-700',
   'This week': 'bg-green-50 text-green-700',
 }
 
-function TaskList() {
-  const [tasks, setTasks] = useState(initialTasks)
-
+function TaskList({ tasks = [], setTasks }) {
   function toggleTask(id) {
-    setTasks(prev =>
-      prev.map(t => t.id === id ? { ...t, done: !t.done } : t)
-    )
+    if (!setTasks) return
+    setTasks(prev => prev.map(t => t.id === id ? { ...t, done: !t.done } : t))
   }
+
+  const visible = tasks.slice(0, 5)
 
   return (
     <div className="bg-white border border-gray-200 rounded-xl p-5">
-      <div className="text-xs text-gray-400 uppercase tracking-wide mb-4">Tasks &amp; follow-ups</div>
+      <div className="text-xs text-gray-400 uppercase tracking-wide mb-4">
+        Tasks &amp; follow-ups
+        <span className="ml-2 text-gray-300">({tasks.filter(t => !t.done).length} open)</span>
+      </div>
       <div className="flex flex-col">
-        {tasks.map(task => (
+        {visible.length === 0 && (
+          <div className="text-sm text-gray-400 py-4 text-center">No tasks yet</div>
+        )}
+        {visible.map(task => (
           <div key={task.id} className="flex items-center gap-3 py-2 border-b border-gray-100 last:border-0">
             <input
               type="checkbox"
@@ -43,6 +41,11 @@ function TaskList() {
           </div>
         ))}
       </div>
+      {tasks.length > 5 && (
+        <a href="/tasks" className="text-xs text-blue-500 hover:text-blue-700 mt-3 block">
+          View all {tasks.length} tasks →
+        </a>
+      )}
     </div>
   )
 }
